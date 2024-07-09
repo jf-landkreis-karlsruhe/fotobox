@@ -33,6 +33,15 @@ class HomeView extends StatelessWidget {
               child: FutureBuilder(
                 future: availableCameras(),
                 builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text(
+                        'Error: Camera access denied',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+
                   if (!snapshot.hasData) {
                     return const Center(child: CircularProgressIndicator());
                   }

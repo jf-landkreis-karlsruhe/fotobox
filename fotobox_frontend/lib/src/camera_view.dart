@@ -16,6 +16,7 @@ class CameraApp extends StatefulWidget {
 
 class _CameraAppState extends State<CameraApp> {
   late CameraController controller;
+  String error = '';
 
   @override
   void initState() {
@@ -28,15 +29,21 @@ class _CameraAppState extends State<CameraApp> {
       if (!mounted) {
         return;
       }
-      setState(() {});
+      setState(() {
+        error = '';
+      });
     }).catchError((Object e) {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
-            // Handle access errors here.
+            setState(() {
+              error = "Error: Access to camera denied";
+            });
             break;
           default:
-            // Handle other errors here.
+            setState(() {
+              error = "Error during camera initialization";
+            });
             break;
         }
       }
@@ -52,7 +59,27 @@ class _CameraAppState extends State<CameraApp> {
   @override
   Widget build(BuildContext context) {
     if (!controller.value.isInitialized) {
-      return const Center(child: CircularProgressIndicator(),);
+      if (error.isNotEmpty) {
+        return Center(
+          child: Text(
+            error,
+            style: const TextStyle(color: Colors.red),
+          ),
+        );
+      }
+
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (error.isNotEmpty) {
+      return Center(
+        child: Text(
+          error,
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
     }
 
     return CameraPreview(controller);
