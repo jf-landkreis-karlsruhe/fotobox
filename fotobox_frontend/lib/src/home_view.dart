@@ -16,44 +16,26 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Fotobox'),
       ),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.photo_camera_outlined),
-              )
-            ],
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: FutureBuilder(
-                future: availableCameras(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: Text(
-                        'Error: Camera access denied',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
-
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  return CameraApp(
-                    cameras: snapshot.data!,
-                  );
-                },
+      body: FutureBuilder(
+        future: availableCameras(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                'Error: No cameras found / camera access denied',
+                style: TextStyle(color: Colors.red),
               ),
-            ),
-          ),
-        ],
+            );
+          }
+      
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+      
+          return CameraApp(
+            cameras: snapshot.data!,
+          );
+        },
       ),
     );
   }
