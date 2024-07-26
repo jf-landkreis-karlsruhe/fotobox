@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:animated_countdown/animated_countdown.dart';
 import 'package:camera/camera.dart';
 import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
@@ -24,6 +25,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
   late CameraController controller;
   String error = '';
   Timer? timer;
+  bool pictureButtonWasPressed = false;
 
   @override
   void initState() {
@@ -154,13 +156,15 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     Widget? image =
         lastImage != null ? Center(child: Image.network(lastImage.path)) : null;
 
-    var preview = Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-              onPressed: () {
+    Widget? countDown = pictureButtonWasPressed
+        ? Center(
+            child: CountDownWidget(
+              textStyle: const TextStyle(color: Colors.red),
+              totalDuration: 3,
+              maxTextSize: 400,
+              minTextSize: 100,
+              onEnd: () {
+                pictureButtonWasPressed = false;
                 takePicture().then((XFile? file) async {
                   if (mounted) {
                     if (file != null) {
@@ -180,6 +184,23 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                   }
                 });
               },
+            ),
+          )
+        : null;
+
+    var preview = Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: pictureButtonWasPressed
+                  ? null
+                  : () {
+                      setState(() {
+                        pictureButtonWasPressed = true;
+                      });
+                    },
               icon: const Icon(Icons.photo_camera_outlined),
             )
           ],
@@ -197,6 +218,10 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     if (image != null) {
       stackChikdren.add(image);
     }
+    if (countDown != null) {
+      stackChikdren.add(countDown);
+    }
+
     return Stack(
       children: stackChikdren,
     );

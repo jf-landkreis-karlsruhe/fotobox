@@ -10,6 +10,7 @@ environment:
   sdk: '>=3.4.3 <4.0.0'
 
 dependencies:
+  animated_countdown: ^0.0.3
   camera: ^0.11.0+1
   download: ^1.0.0
   flutter:
