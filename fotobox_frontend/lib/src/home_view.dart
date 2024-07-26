@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/camera_view.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
+import 'package:fotobox_frontend/src/new_session_view.dart';
 import 'package:watch_it/watch_it.dart';
 
 /// Displays a list of SampleItems.
@@ -66,29 +67,7 @@ class MainContentView extends StatelessWidget with WatchItMixin {
         ),
         Visibility(
           visible: currentSession == null,
-          child: Center(
-              child: ElevatedButton.icon(
-            icon: const Icon(Icons.cameraswitch_outlined),
-            label: const Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                'New Session',
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            style: const ButtonStyle(
-              padding: WidgetStatePropertyAll(EdgeInsets.all(20)),
-              iconSize: WidgetStatePropertyAll(60),
-              backgroundColor: WidgetStatePropertyAll(Colors.blue),
-              iconColor: WidgetStatePropertyAll(Colors.white),
-            ),
-            onPressed: () {
-              manager.startNewSessionCommand();
-            },
-          )),
+          child: const NewSessionView(),
         ),
       ],
     );
