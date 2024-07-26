@@ -221,7 +221,8 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                   children: [
                                     Expanded(
                                       child: PrettyQrView.data(
-                                        data: 'https://www.google.de/?hl=de',
+                                        data:
+                                            'https://jf-landkreis-karlsruhe.de/', //TODO: link to images
                                         errorCorrectLevel:
                                             QrErrorCorrectLevel.H,
                                         decoration: const PrettyQrDecoration(
@@ -230,7 +231,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                           ),
                                           image: PrettyQrDecorationImage(
                                             image: AssetImage(
-                                                'images/flutter_logo.png'),
+                                                'images/flutter_logo.png'), //TODO: different image
                                           ),
                                         ),
                                       ),
