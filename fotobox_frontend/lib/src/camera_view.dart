@@ -203,7 +203,14 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                       });
                     },
               icon: const Icon(Icons.photo_camera_outlined),
-            )
+            ),
+            const SizedBox(width: 10),
+            IconButton(
+              onPressed: () {
+                manager.endCurrentSessionCommand();
+              },
+              icon: const Icon(Icons.close),
+            ),
           ],
         ),
         Expanded(
