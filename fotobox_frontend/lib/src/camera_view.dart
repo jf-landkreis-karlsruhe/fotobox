@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
 import 'package:intl/intl.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:watch_it/watch_it.dart';
 
 class CameraApp extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -209,6 +210,45 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
               onPressed: pictureButtonWasPressed
                   ? null
                   : () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog.fullscreen(
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(50),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: PrettyQrView.data(
+                                        data: 'https://www.google.de/?hl=de',
+                                        errorCorrectLevel:
+                                            QrErrorCorrectLevel.H,
+                                        decoration: const PrettyQrDecoration(
+                                          shape: PrettyQrSmoothSymbol(
+                                            color: Colors.blue,
+                                          ),
+                                          image: PrettyQrDecorationImage(
+                                            image: AssetImage(
+                                                'images/flutter_logo.png'),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: const Icon(Icons.close),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
                       manager.saveCurrentSessionCommand();
                     },
               icon: const Icon(Icons.save_outlined),
