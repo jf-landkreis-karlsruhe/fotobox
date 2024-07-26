@@ -6,6 +6,7 @@ import 'package:fotobox_frontend/src/model/session_model.dart';
 abstract class SessionManager extends ChangeNotifier {
   late Command<void, SessionModel> startNewSessionCommand;
   late Command<void, void> endCurrentSessionCommand;
+  late Command<void, void> saveCurrentSessionCommand;
 
   SessionModel? get currentSession;
   XFile? lastImage;
@@ -19,6 +20,8 @@ class SessionManagerImplementation extends ChangeNotifier
   late Command<void, SessionModel> startNewSessionCommand;
   @override
   late Command<void, void> endCurrentSessionCommand;
+  @override
+  late Command<void, void> saveCurrentSessionCommand;
 
   SessionModel? _currentSession;
   @override
@@ -46,6 +49,10 @@ class SessionManagerImplementation extends ChangeNotifier
     endCurrentSessionCommand = Command.createAsyncNoParamNoResult(
       _endCurrentSession,
     );
+
+    saveCurrentSessionCommand = Command.createAsyncNoParamNoResult(
+      _saveCurrentSession,
+    );
   }
 
   Future<SessionModel> _startNewSession() async {
@@ -56,6 +63,10 @@ class SessionManagerImplementation extends ChangeNotifier
   }
 
   Future _endCurrentSession() async {
+    currentSession = null;
+  }
+
+  Future _saveCurrentSession() async {
     //TODO: save session
     currentSession = null;
   }
