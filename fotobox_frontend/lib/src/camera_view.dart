@@ -206,16 +206,20 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
             ),
             const SizedBox(width: 10),
             IconButton(
-              onPressed: () {
-                manager.saveCurrentSessionCommand();
-              },
+              onPressed: pictureButtonWasPressed
+                  ? null
+                  : () {
+                      manager.saveCurrentSessionCommand();
+                    },
               icon: const Icon(Icons.save_outlined),
             ),
             const SizedBox(width: 10),
             IconButton(
-              onPressed: () {
-                manager.endCurrentSessionCommand();
-              },
+              onPressed: pictureButtonWasPressed
+                  ? null
+                  : () {
+                      manager.endCurrentSessionCommand();
+                    },
               icon: const Icon(Icons.close),
             ),
           ],
