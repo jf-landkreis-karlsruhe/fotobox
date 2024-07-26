@@ -32,8 +32,11 @@ class HomeView extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return CameraSessionView(
-            cameras: snapshot.data!,
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CameraSessionView(
+              cameras: snapshot.data!,
+            ),
           );
         },
       ),
