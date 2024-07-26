@@ -5,6 +5,7 @@ import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
+import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
 import 'package:intl/intl.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -15,9 +16,11 @@ class CameraApp extends StatefulWidget with WatchItStatefulWidgetMixin {
   const CameraApp({
     super.key,
     required this.cameras,
+    required this.currentSession,
   });
 
   final List<CameraDescription> cameras;
+  final SessionModel currentSession;
 
   @override
   State<CameraApp> createState() => _CameraAppState();
@@ -131,6 +134,8 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
         watchPropertyValue((SessionManager manager) => manager.lastImage);
     final SessionManager manager = di<SessionManager>();
 
+    bool maxPicturesReached = widget.currentSession.images.length >= 10;
+
     if (!controller.value.isInitialized) {
       if (error.isNotEmpty) {
         return Center(
@@ -196,7 +201,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              onPressed: pictureButtonWasPressed
+              onPressed: pictureButtonWasPressed || maxPicturesReached
                   ? null
                   : () {
                       setState(() {
@@ -318,7 +323,10 @@ class CameraSessionView extends StatelessWidget with WatchItMixin {
     return Column(
       children: [
         Expanded(
-          child: CameraApp(cameras: cameras),
+          child: CameraApp(
+            cameras: cameras,
+            currentSession: currentSession,
+          ),
         ),
         const SizedBox(height: 10),
         ThumbnailImagesView(currentSession: currentSession),
