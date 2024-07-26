@@ -16,7 +16,7 @@ class MainWidget extends StatelessWidget {
       // MaterialApp to restore the navigation stack when a user leaves and
       // returns to the app after it has been killed while running in the
       // background.
-      restorationScopeId: 'app',   
+      restorationScopeId: 'app',
       // Provide the generated AppLocalizations to the MaterialApp. This
       // allows descendant Widgets to display the correct translations
       // depending on the user's locale.
@@ -28,7 +28,7 @@ class MainWidget extends StatelessWidget {
       ],
       supportedLocales: const [
         Locale('en', ''), // English, no country code
-      ],   
+      ],
       // Use AppLocalizations to configure the correct application title
       // depending on the user's locale.
       //
@@ -36,8 +36,8 @@ class MainWidget extends StatelessWidget {
       // directory.
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appTitle,
-      theme: ThemeData(),
-    
+      theme: ThemeData.dark(),
+
       // Define a function to handle named routes in order to support
       // Flutter web url navigation and deep linking.
       onGenerateRoute: (RouteSettings routeSettings) {
