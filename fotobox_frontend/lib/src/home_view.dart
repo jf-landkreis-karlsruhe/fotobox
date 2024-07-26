@@ -27,12 +27,12 @@ class HomeView extends StatelessWidget {
               ),
             );
           }
-      
+
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-      
-          return CameraApp(
+
+          return CameraSessionView(
             cameras: snapshot.data!,
           );
         },

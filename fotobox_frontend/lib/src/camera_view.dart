@@ -5,6 +5,7 @@ import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
+import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
 import 'package:intl/intl.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -224,6 +225,34 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
 
     return Stack(
       children: stackChikdren,
+    );
+  }
+}
+
+class CameraSessionView extends StatelessWidget with WatchItMixin {
+  const CameraSessionView({super.key, required this.cameras});
+
+  final List<CameraDescription> cameras;
+
+  @override
+  Widget build(BuildContext context) {
+    var manager = watchIt<SessionManager>();
+    var currentSession = manager.currentSession;
+
+    if (currentSession == null) {
+      return const Center(
+        child: Text('No session active!'),
+      );
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: CameraApp(cameras: cameras),
+        ),
+        const SizedBox(height: 10),
+        ThumbnailImagesView(currentSession: currentSession),
+      ],
     );
   }
 }
