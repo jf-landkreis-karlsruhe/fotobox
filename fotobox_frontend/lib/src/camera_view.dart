@@ -213,6 +213,13 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                       showDialog(
                         context: context,
                         builder: (context) {
+                          var timer = Timer(
+                            const Duration(seconds: 30),
+                            () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+
                           return Dialog.fullscreen(
                             child: Center(
                               child: Padding(
@@ -239,9 +246,13 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                     const SizedBox(height: 20),
                                     IconButton(
                                       onPressed: () {
+                                        timer.cancel();
                                         Navigator.of(context).pop();
                                       },
-                                      icon: const Icon(Icons.close),
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 50,
+                                      ),
                                     )
                                   ],
                                 ),
