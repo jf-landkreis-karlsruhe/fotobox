@@ -9,6 +9,8 @@ abstract class SessionManager extends ChangeNotifier {
 
   SessionModel? get currentSession;
   XFile? lastImage;
+
+  void addImage(XFile image);
 }
 
 class SessionManagerImplementation extends ChangeNotifier
@@ -56,5 +58,15 @@ class SessionManagerImplementation extends ChangeNotifier
   Future _endCurrentSession() async {
     //TODO: save session
     currentSession = null;
+  }
+
+  @override
+  void addImage(XFile image) {
+    if (currentSession == null) {
+      return;
+    }
+
+    lastImage = image;
+    currentSession!.addImage(image);
   }
 }

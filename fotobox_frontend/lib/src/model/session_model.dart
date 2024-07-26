@@ -5,4 +5,9 @@ import 'package:flutter_guid/flutter_guid.dart';
 class SessionModel extends ChangeNotifier {
   Guid sessionCode = Guid.newGuid;
   List<XFile> images = [];
+
+  void addImage(XFile image) {
+    images.add(image);
+    notifyListeners();
+  }
 }

@@ -175,7 +175,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                       // var test = Stream.fromIterable(image);
                       // download(test, 'Foto_$formattedDate.png');
 
-                      manager.lastImage = file;
+                      manager.addImage(file);
                       timer = Timer(const Duration(seconds: 3), () {
                         timer = null;
                         manager.lastImage = null;
