@@ -46,7 +46,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
       cameraDescription,
       kIsWeb ? ResolutionPreset.max : ResolutionPreset.medium,
       enableAudio: false,
-      // imageFormatGroup: ImageFormatGroup.jpeg,
+      imageFormatGroup: ImageFormatGroup.jpeg,
     );
 
     controller = cameraController;

@@ -36,7 +36,7 @@ class SessionServiceImplementation implements SessionService {
       for (var i = 0; i < images.length; i++) {
         var image = images[i];
         try {
-          await image.saveTo('${session.sessionCode.toString()}/{$i}.png');
+          await image.saveTo('${session.sessionCode.toString()}/$i.jpeg');
         } on Exception {
           return 'Error during save';
         }
@@ -52,6 +52,6 @@ class SessionServiceImplementation implements SessionService {
 
     var image = await file.readAsBytes();
     var imageAsStream = Stream.fromIterable(image);
-    download(imageAsStream, '${sessionCode}_$count.png');
+    download(imageAsStream, '${sessionCode}_$count.jpeg');
   }
 }
