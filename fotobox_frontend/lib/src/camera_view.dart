@@ -2,13 +2,11 @@ import 'dart:async';
 import 'package:animated_countdown/animated_countdown.dart';
 import 'package:camera/camera.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
-import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
-import 'package:intl/intl.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -124,7 +122,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     try {
       final XFile file = await cameraController.takePicture();
       return file;
-    } on CameraException catch (e) {
+    } on CameraException {
       return null;
     }
   }
@@ -176,13 +174,6 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                 takePicture().then((XFile? file) async {
                   if (mounted) {
                     if (file != null) {
-                      // var time = DateTime.now();
-                      // String formattedDate =
-                      //     DateFormat('ddMMyyyy_HHmmss').format(time);
-                      // var image = await file.readAsBytes();
-                      // var test = Stream.fromIterable(image);
-                      // download(test, 'Foto_$formattedDate.png');
-
                       manager.addImage(file);
                       timer = Timer(const Duration(seconds: 3), () {
                         timer = null;

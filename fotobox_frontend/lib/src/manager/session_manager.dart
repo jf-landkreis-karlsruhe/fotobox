@@ -2,6 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_command/flutter_command.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
+import 'package:fotobox_frontend/src/service/session_service.dart';
+import 'package:watch_it/watch_it.dart';
 
 abstract class SessionManager extends ChangeNotifier {
   late Command<void, SessionModel> startNewSessionCommand;
@@ -16,6 +18,8 @@ abstract class SessionManager extends ChangeNotifier {
 
 class SessionManagerImplementation extends ChangeNotifier
     implements SessionManager {
+  late final SessionService _sessionService;
+
   @override
   late Command<void, SessionModel> startNewSessionCommand;
   @override
@@ -41,6 +45,8 @@ class SessionManagerImplementation extends ChangeNotifier
   }
 
   SessionManagerImplementation() {
+    _sessionService = di<SessionService>();
+
     startNewSessionCommand = Command.createAsyncNoParam(
       _startNewSession,
       initialValue: SessionModel(),
@@ -56,7 +62,6 @@ class SessionManagerImplementation extends ChangeNotifier
   }
 
   Future<SessionModel> _startNewSession() async {
-    //TODO: save old session
     var newSession = SessionModel();
     currentSession = newSession;
     return newSession;
@@ -67,7 +72,11 @@ class SessionManagerImplementation extends ChangeNotifier
   }
 
   Future _saveCurrentSession() async {
-    //TODO: save session
+    if (currentSession == null) {
+      return;
+    }
+
+    await _sessionService.saveSession(currentSession!);
     currentSession = null;
   }
 
