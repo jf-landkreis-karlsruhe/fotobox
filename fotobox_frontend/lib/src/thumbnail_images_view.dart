@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:watch_it/watch_it.dart';
@@ -24,7 +26,9 @@ class ThumbnailImagesView extends StatelessWidget with WatchItMixin {
           .map((image) => SizedBox(
                 width: 150,
                 height: 80,
-                child: Image.network(image.path),
+                child: kIsWeb
+                    ? Image.network(image.path)
+                    : Image.file(File(image.path)),
               ))
           .toList(),
     );

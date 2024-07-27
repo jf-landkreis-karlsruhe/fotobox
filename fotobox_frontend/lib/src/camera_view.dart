@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:animated_countdown/animated_countdown.dart';
 import 'package:camera/camera.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
@@ -159,8 +160,12 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
       );
     }
 
-    Widget? image =
-        lastImage != null ? Center(child: Image.network(lastImage.path)) : null;
+    Widget? image = lastImage != null
+        ? Center(
+            child: kIsWeb
+                ? Image.network(lastImage.path)
+                : Image.file(File(lastImage.path)))
+        : null;
 
     Widget? countDown = pictureButtonWasPressed
         ? Center(
