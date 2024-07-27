@@ -12,6 +12,7 @@ environment:
 dependencies:
   animated_countdown: ^0.0.3
   camera: ^0.11.0+1
+  circular_countdown_timer: ^0.2.3
   download: ^1.0.0
   flutter:
     sdk: flutter

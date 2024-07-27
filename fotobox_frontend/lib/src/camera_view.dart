@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:animated_countdown/animated_countdown.dart';
 import 'package:camera/camera.dart';
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -218,13 +219,6 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          var timer = Timer(
-                            const Duration(seconds: 30),
-                            () {
-                              Navigator.of(context).pop();
-                            },
-                          );
-
                           return Dialog.fullscreen(
                             child: Center(
                               child: Padding(
@@ -249,16 +243,36 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                       ),
                                     ),
                                     const SizedBox(height: 20),
-                                    IconButton(
-                                      onPressed: () {
-                                        timer.cancel();
-                                        Navigator.of(context).pop();
-                                      },
-                                      icon: const Icon(
-                                        Icons.close,
-                                        size: 50,
-                                      ),
-                                    )
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CircularCountDownTimer(
+                                          duration: 30,
+                                          width: 50,
+                                          height: 50,
+                                          fillColor: Colors.red,
+                                          backgroundColor: Colors.blue,
+                                          ringColor: Colors.yellow,
+                                          autoStart: true,
+                                          isReverse: true,
+                                          isTimerTextShown: true,
+                                          onComplete: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        const SizedBox(width: 10),
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            size: 50,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
