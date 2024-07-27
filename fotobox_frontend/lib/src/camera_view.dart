@@ -219,6 +219,8 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                       showDialog(
                         context: context,
                         builder: (context) {
+                          var controller = CountDownController();
+
                           return Dialog.fullscreen(
                             child: Center(
                               child: Padding(
@@ -248,6 +250,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                           MainAxisAlignment.center,
                                       children: [
                                         CircularCountDownTimer(
+                                          controller: controller,
                                           duration: 30,
                                           width: 50,
                                           height: 50,
@@ -260,6 +263,16 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                           onComplete: () {
                                             Navigator.of(context).pop();
                                           },
+                                        ),
+                                        const SizedBox(width: 10),
+                                        IconButton(
+                                          onPressed: () {
+                                            controller.restart();
+                                          },
+                                          icon: const Icon(
+                                            Icons.restart_alt,
+                                            size: 50,
+                                          ),
                                         ),
                                         const SizedBox(width: 10),
                                         IconButton(
