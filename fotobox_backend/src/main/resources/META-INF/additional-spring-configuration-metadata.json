@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "folder.path",
+    "type": "java.lang.String",
+    "description": "'folder.path'"
+  },
+  {
+    "name": "file.type",
+    "type": "java.lang.String",
+    "description": "'file.type'"
+  },
+  {
+    "name": "admin.password",
+    "type": "java.lang.String",
+    "description": "A description for 'admin.password'"
+  },
+  {
+    "name": "admin.username",
+    "type": "java.lang.String",
+    "description": "A description for 'admin.username'"
+  }
+]}
