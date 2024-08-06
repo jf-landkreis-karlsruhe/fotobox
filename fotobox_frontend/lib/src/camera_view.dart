@@ -134,81 +134,103 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
   void saveSession() {
     final SessionManager manager = di<SessionManager>();
 
+    manager.saveCurrentSessionCommand();
+
     showDialog(
       context: context,
       builder: (context) {
         var controller = CountDownController();
 
         return Dialog.fullscreen(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(50),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: PrettyQrView.data(
-                      data:
-                          'https://jf-landkreis-karlsruhe.de/', //TODO: link to images
-                      errorCorrectLevel: QrErrorCorrectLevel.H,
-                      decoration: const PrettyQrDecoration(
-                        shape: PrettyQrSmoothSymbol(
-                          color: Colors.blue,
-                        ),
-                        image: PrettyQrDecorationImage(
-                          image: AssetImage('images/Elefant_ohneFlaeche.png'),
-                        ),
+          child: ValueListenableBuilder(
+            valueListenable: manager.saveCurrentSessionCommand,
+            builder: (context, sessionLink, _) {
+              return ValueListenableBuilder(
+                valueListenable: manager.saveCurrentSessionCommand.isExecuting,
+                builder: (context, isRunning, _) {
+                  if (isRunning) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: sessionLink == null
+                                ? const Center(
+                                    child: Text(
+                                      'Error while saving images!',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  )
+                                : PrettyQrView.data(
+                                    data: sessionLink,
+                                    errorCorrectLevel: QrErrorCorrectLevel.H,
+                                    decoration: const PrettyQrDecoration(
+                                      shape: PrettyQrSmoothSymbol(
+                                        color: Colors.blue,
+                                      ),
+                                      image: PrettyQrDecorationImage(
+                                        image: AssetImage(
+                                            'images/Elefant_ohneFlaeche.png'),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularCountDownTimer(
+                                controller: controller,
+                                duration: 30,
+                                width: 50,
+                                height: 50,
+                                fillColor: Colors.red,
+                                backgroundColor: Colors.blue,
+                                ringColor: Colors.yellow,
+                                autoStart: true,
+                                isReverse: true,
+                                isTimerTextShown: true,
+                                onComplete: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              const SizedBox(width: 10),
+                              IconButton(
+                                onPressed: () {
+                                  controller.restart();
+                                },
+                                icon: const Icon(
+                                  Icons.restart_alt,
+                                  size: 50,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: const Icon(
+                                  Icons.close,
+                                  size: 50,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularCountDownTimer(
-                        controller: controller,
-                        duration: 30,
-                        width: 50,
-                        height: 50,
-                        fillColor: Colors.red,
-                        backgroundColor: Colors.blue,
-                        ringColor: Colors.yellow,
-                        autoStart: true,
-                        isReverse: true,
-                        isTimerTextShown: true,
-                        onComplete: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        onPressed: () {
-                          controller.restart();
-                        },
-                        icon: const Icon(
-                          Icons.restart_alt,
-                          size: 50,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(
-                          Icons.close,
-                          size: 50,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                  );
+                },
+              );
+            },
           ),
         );
       },
     );
-    manager.saveCurrentSessionCommand();
   }
 
   @override

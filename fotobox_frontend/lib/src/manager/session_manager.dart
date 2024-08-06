@@ -8,7 +8,7 @@ import 'package:watch_it/watch_it.dart';
 abstract class SessionManager extends ChangeNotifier {
   late Command<void, SessionModel> startNewSessionCommand;
   late Command<void, void> endCurrentSessionCommand;
-  late Command<void, void> saveCurrentSessionCommand;
+  late Command<void, String?> saveCurrentSessionCommand;
 
   SessionModel? get currentSession;
   XFile? lastImage;
@@ -25,7 +25,7 @@ class SessionManagerImplementation extends ChangeNotifier
   @override
   late Command<void, void> endCurrentSessionCommand;
   @override
-  late Command<void, void> saveCurrentSessionCommand;
+  late Command<void, String?> saveCurrentSessionCommand;
 
   SessionModel? _currentSession;
   @override
@@ -56,8 +56,9 @@ class SessionManagerImplementation extends ChangeNotifier
       _endCurrentSession,
     );
 
-    saveCurrentSessionCommand = Command.createAsyncNoParamNoResult(
+    saveCurrentSessionCommand = Command.createAsyncNoParam(
       _saveCurrentSession,
+      initialValue: null,
     );
   }
 
@@ -71,13 +72,14 @@ class SessionManagerImplementation extends ChangeNotifier
     currentSession = null;
   }
 
-  Future _saveCurrentSession() async {
+  Future<String?> _saveCurrentSession() async {
     if (currentSession == null) {
-      return;
+      return null;
     }
 
-    await _sessionService.saveSession(currentSession!);
+    var result = await _sessionService.saveSession(currentSession!);
     currentSession = null;
+    return result;
   }
 
   @override

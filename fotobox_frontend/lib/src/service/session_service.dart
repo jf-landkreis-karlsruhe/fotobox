@@ -8,23 +8,30 @@ import 'package:fotobox_frontend/src/service/session_dto.dart';
 import 'package:http/http.dart' as http;
 
 abstract class SessionService {
-  Future<String> saveSession(SessionModel session);
+  Future<String?> saveSession(SessionModel session);
 }
 
 class SessionServiceImplementation implements SessionService {
   @override
-  Future<String> saveSession(SessionModel session) async {
-    await _saveSession(session);
-    return session.sessionCode.toString();
+  Future<String?> saveSession(SessionModel session) async {
+    try {
+      return await _saveToRest(session);
+    } catch (e) {
+      return await _saveSessionLocal(session);
+    }
   }
 
-  Future _saveSession(SessionModel session) async {
+  Future<String?> _saveSessionLocal(SessionModel session) async {
     var images = session.images;
 
     if (kIsWeb) {
-      for (var i = 0; i < images.length; i++) {
-        var image = images[i];
-        await _saveSingleFileForWeb(image, session.sessionCode.toString(), i);
+      try {
+        for (var i = 0; i < images.length; i++) {
+          var image = images[i];
+          await _saveSingleFileForWeb(image, session.sessionCode.toString(), i);
+        }
+      } on Exception {
+        return null;
       }
     } else {
       var directory = Directory(session.sessionCode.toString());
@@ -32,7 +39,7 @@ class SessionServiceImplementation implements SessionService {
         try {
           directory.create();
         } on Exception {
-          return 'Error during save';
+          return null;
         }
       }
 
@@ -41,10 +48,12 @@ class SessionServiceImplementation implements SessionService {
         try {
           await image.saveTo('${session.sessionCode.toString()}/$i.jpeg');
         } on Exception {
-          return 'Error during save';
+          return null;
         }
       }
     }
+
+    return session.sessionCode.toString();
   }
 
   Future _saveSingleFileForWeb(
@@ -71,7 +80,7 @@ Future<String?> _saveToRest(SessionModel model) async {
 
   var json = jsonEncode(dto);
   var response = await http.post(
-    Uri.http("127.0.0.1:5000", "/savesession"), // TODO: correct endpoint
+    Uri.http("127.0.0.1:8080", "/savesession"), // TODO: correct endpoint
     body: json,
   );
 
