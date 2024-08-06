@@ -17,7 +17,15 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fotobox'),
+        title: const Text(
+          'Fotobox',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Image.asset('images/Elefant_ohneFlaeche.png'),
+        ),
+        leadingWidth: 80,
       ),
       body: FutureBuilder(
         future: availableCameras(),
