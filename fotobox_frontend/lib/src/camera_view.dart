@@ -155,8 +155,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                           color: Colors.blue,
                         ),
                         image: PrettyQrDecorationImage(
-                          image: AssetImage(
-                              'images/flutter_logo.png'), //TODO: different image
+                          image: AssetImage('images/Elefant_ohneFlaeche.png'),
                         ),
                       ),
                     ),
