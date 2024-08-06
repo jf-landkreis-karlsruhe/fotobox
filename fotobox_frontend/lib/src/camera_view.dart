@@ -162,21 +162,34 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                 ? const Center(
                                     child: Text(
                                       'Error while saving images!',
-                                      style: TextStyle(color: Colors.red),
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   )
-                                : PrettyQrView.data(
-                                    data: sessionLink,
-                                    errorCorrectLevel: QrErrorCorrectLevel.H,
-                                    decoration: const PrettyQrDecoration(
-                                      shape: PrettyQrSmoothSymbol(
-                                        color: Colors.blue,
+                                : Column(
+                                    children: [
+                                      Expanded(
+                                        child: PrettyQrView.data(
+                                          data: sessionLink,
+                                          errorCorrectLevel:
+                                              QrErrorCorrectLevel.H,
+                                          decoration: const PrettyQrDecoration(
+                                            shape: PrettyQrSmoothSymbol(
+                                              color: Colors.blue,
+                                            ),
+                                            image: PrettyQrDecorationImage(
+                                              image: AssetImage(
+                                                  'images/Elefant_ohneFlaeche.png'),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      image: PrettyQrDecorationImage(
-                                        image: AssetImage(
-                                            'images/Elefant_ohneFlaeche.png'),
-                                      ),
-                                    ),
+                                      const SizedBox(height: 10),
+                                      Text('Session Link: $sessionLink'),
+                                    ],
                                   ),
                           ),
                           const SizedBox(height: 20),
