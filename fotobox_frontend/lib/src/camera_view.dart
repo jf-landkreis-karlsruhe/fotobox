@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
@@ -31,6 +32,8 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
   String error = '';
   Timer? timer;
   bool pictureButtonWasPressed = false;
+
+  var focusNode = FocusNode();
 
   @override
   void initState() {
@@ -128,6 +131,87 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     }
   }
 
+  void saveSession() {
+    final SessionManager manager = di<SessionManager>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        var controller = CountDownController();
+
+        return Dialog.fullscreen(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(50),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: PrettyQrView.data(
+                      data:
+                          'https://jf-landkreis-karlsruhe.de/', //TODO: link to images
+                      errorCorrectLevel: QrErrorCorrectLevel.H,
+                      decoration: const PrettyQrDecoration(
+                        shape: PrettyQrSmoothSymbol(
+                          color: Colors.blue,
+                        ),
+                        image: PrettyQrDecorationImage(
+                          image: AssetImage(
+                              'images/flutter_logo.png'), //TODO: different image
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularCountDownTimer(
+                        controller: controller,
+                        duration: 30,
+                        width: 50,
+                        height: 50,
+                        fillColor: Colors.red,
+                        backgroundColor: Colors.blue,
+                        ringColor: Colors.yellow,
+                        autoStart: true,
+                        isReverse: true,
+                        isTimerTextShown: true,
+                        onComplete: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        onPressed: () {
+                          controller.restart();
+                        },
+                        icon: const Icon(
+                          Icons.restart_alt,
+                          size: 50,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          size: 50,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    manager.saveCurrentSessionCommand();
+  }
+
   @override
   Widget build(BuildContext context) {
     var lastImage =
@@ -212,84 +296,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
               onPressed: pictureButtonWasPressed
                   ? null
                   : () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          var controller = CountDownController();
-
-                          return Dialog.fullscreen(
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(50),
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: PrettyQrView.data(
-                                        data:
-                                            'https://jf-landkreis-karlsruhe.de/', //TODO: link to images
-                                        errorCorrectLevel:
-                                            QrErrorCorrectLevel.H,
-                                        decoration: const PrettyQrDecoration(
-                                          shape: PrettyQrSmoothSymbol(
-                                            color: Colors.blue,
-                                          ),
-                                          image: PrettyQrDecorationImage(
-                                            image: AssetImage(
-                                                'images/flutter_logo.png'), //TODO: different image
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CircularCountDownTimer(
-                                          controller: controller,
-                                          duration: 30,
-                                          width: 50,
-                                          height: 50,
-                                          fillColor: Colors.red,
-                                          backgroundColor: Colors.blue,
-                                          ringColor: Colors.yellow,
-                                          autoStart: true,
-                                          isReverse: true,
-                                          isTimerTextShown: true,
-                                          onComplete: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        const SizedBox(width: 10),
-                                        IconButton(
-                                          onPressed: () {
-                                            controller.restart();
-                                          },
-                                          icon: const Icon(
-                                            Icons.restart_alt,
-                                            size: 50,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        IconButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          icon: const Icon(
-                                            Icons.close,
-                                            size: 50,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                      manager.saveCurrentSessionCommand();
+                      saveSession();
                     },
               icon: const Icon(Icons.save_outlined),
             ),
@@ -321,8 +328,37 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
       stackChikdren.add(countDown);
     }
 
-    return Stack(
-      children: stackChikdren,
+    return KeyboardListener(
+      focusNode: focusNode,
+      autofocus: true,
+      onKeyEvent: (value) {
+        switch (value.logicalKey) {
+          case LogicalKeyboardKey.enter:
+            if (pictureButtonWasPressed || maxPicturesReached) {
+              return;
+            }
+            setState(() {
+              pictureButtonWasPressed = true;
+            });
+            break;
+          case LogicalKeyboardKey.escape:
+            if (pictureButtonWasPressed) {
+              return;
+            }
+            manager.endCurrentSessionCommand();
+            break;
+          case LogicalKeyboardKey.space:
+            if (pictureButtonWasPressed) {
+              return;
+            }
+            saveSession();
+            break;
+          default:
+        }
+      },
+      child: Stack(
+        children: stackChikdren,
+      ),
     );
   }
 }

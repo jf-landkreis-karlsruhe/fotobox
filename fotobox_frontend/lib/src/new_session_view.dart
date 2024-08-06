@@ -22,6 +22,7 @@ class _NewSessionViewState extends State<NewSessionView> {
   @override
   Widget build(BuildContext context) {
     var manager = di<SessionManager>();
+
     return KeyboardListener(
       focusNode: focusNode,
       autofocus: true,
