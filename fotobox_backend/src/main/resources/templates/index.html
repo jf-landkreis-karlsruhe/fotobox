@@ -7,6 +7,41 @@
     <title>Code Input</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Custom CSS to align the buttons */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .image-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            width: calc(25% - 10px); /* Adjust for gaps */
+        }
+
+        .image-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .image-card .card-body {
+            text-align: center;
+        }
+
+        .image-card .btn {
+            margin-top: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -30,40 +65,86 @@
     </header>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="card mt-5">
                     <div class="card-body">
                         <h5 class="card-title">Bilderausgabe der Fotobox</h5>
-                        <form id="codeForm">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="codeInput" name="code"
-                                    placeholder="Bitte geben Sie den Code für Ihre Bilder ein"
-                                    oninput="validateInput(this)">
-                            </div>
-                            <button type="button" class="btn btn-primary" onclick="submitCode()">Bilder
-                                anfordern</button>
-                        </form>
-                        <div id="result" class="mt-3"></div>
+						<form id="codeForm" onsubmit="handleSubmit(event)">
+						    <div class="form-group">
+						        <input type="text" class="form-control" id="codeInput" name="code"
+						            placeholder="Bitte geben Sie den Code für Ihre Bilder ein" oninput="validateInput(this)">
+						    </div>
+						    <div class="button-container">
+						        <button type="button" class="btn btn-primary" onclick="submitCode()">Bilder anzeigen</button>
+						        <button type="button" id="downloadAllButton" class="btn btn-success" style="display: none;"
+						            onclick="downloadAllImages()">Alle Bilder herunterladen</button>
+						    </div>
+						</form>
+                        <div id="result"></div>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="imageGrid" class="image-grid mt-5"></div>
     </div>
     <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
     <script>
+		function handleSubmit(event) {
+		    event.preventDefault(); // Verhindert das Standard-Formularverhalten
+		    submitCode(); // Ruft die Funktion zum Anzeigen der Bilder auf
+		}
+		
         function submitCode() {
             const code = document.getElementById('codeInput').value.trim();
             const resultDiv = document.getElementById('result');
+            const imageGrid = document.getElementById('imageGrid');
             resultDiv.innerHTML = '';
+            imageGrid.innerHTML = '';
 
             if (code === '') {
                 resultDiv.innerHTML = '<div class="alert alert-danger" role="alert">Bitte geben Sie einen Code ein.</div>';
                 return;
             }
 
+            // Fetch list of images
+            fetch(`/getPictureListById/${code}`)
+                .then(response => response.json())
+                .then(imageUrls => {
+                    if (imageUrls.length === 0 || imageUrls[0].startsWith("No pictures")) {
+                        resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">${imageUrls[0]}</div>`;
+                        return;
+                    }
+
+                    // Display images in a grid
+                    imageUrls.forEach(url => {
+                        const card = document.createElement('div');
+                        card.className = 'image-card';
+                        card.innerHTML = `
+                            <img src="${url}" class="card-img-top" alt="Image">
+                            <div class="card-body">
+                                <a href="${url}" class="btn btn-primary" download>Download</a>
+                            </div>
+                        `;
+                        imageGrid.appendChild(card);
+                    });
+
+                    // Show button to download all images
+                    document.getElementById('downloadAllButton').style.display = 'inline-block';
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
+                });
+        }
+
+        function downloadAllImages() {
+            const code = document.getElementById('codeInput').value.trim();
+            if (code === '') {
+                alert('Bitte geben Sie einen Code ein.');
+                return;
+            }
+
+            // Fetch all images as a zip file
             fetch(`/getPictureById/${code}`)
                 .then(response => {
                     if (response.ok) {
@@ -73,14 +154,17 @@
                     }
                 })
                 .then(blob => {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = `${code}.zip`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${code}.zip`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
                 })
                 .catch(error => {
+                    const resultDiv = document.getElementById('result');
                     resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div>`;
                 });
         }
