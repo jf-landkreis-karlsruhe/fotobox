@@ -6,7 +6,7 @@ part 'session_dto.g.dart';
 class SessionDto {
   SessionDto();
 
-  String sessionCode = "";
+  String token = "";
   List<List<int>> images = [];
 
   factory SessionDto.fromJson(Map<String, dynamic> json) =>

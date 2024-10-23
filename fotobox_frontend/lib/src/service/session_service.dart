@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_guid/flutter_guid.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/service/session_dto.dart';
 import 'package:http/http.dart' as http;
@@ -23,18 +24,19 @@ class SessionServiceImplementation implements SessionService {
 
   Future<String?> _saveSessionLocal(SessionModel session) async {
     var images = session.images;
+    var sessionCode = Guid.newGuid.toString();
 
     if (kIsWeb) {
       try {
         for (var i = 0; i < images.length; i++) {
           var image = images[i];
-          await _saveSingleFileForWeb(image, session.sessionCode.toString(), i);
+          await _saveSingleFileForWeb(image, sessionCode, i);
         }
       } on Exception {
         return null;
       }
     } else {
-      var directory = Directory(session.sessionCode.toString());
+      var directory = Directory(sessionCode);
       if (!await directory.exists()) {
         try {
           directory.create();
@@ -46,14 +48,14 @@ class SessionServiceImplementation implements SessionService {
       for (var i = 0; i < images.length; i++) {
         var image = images[i];
         try {
-          await image.saveTo('${session.sessionCode.toString()}/$i.jpeg');
+          await image.saveTo('$sessionCode/$i.jpeg');
         } on Exception {
           return null;
         }
       }
     }
 
-    return session.sessionCode.toString();
+    return sessionCode;
   }
 
   Future _saveSingleFileForWeb(
@@ -75,12 +77,12 @@ Future<String?> _saveToRest(SessionModel model) async {
     images.add(imageInBytes);
   }
   var dto = SessionDto()
-    ..sessionCode = model.sessionCode.toString()
+    ..token = "" //TODO: correct token
     ..images = images;
 
   var json = jsonEncode(dto);
   var response = await http.post(
-    Uri.http("127.0.0.1:8080", "/savesession"), // TODO: correct endpoint
+    Uri.http("127.0.0.1:8080", "/savesession"),
     body: json,
   );
 
