@@ -7,6 +7,7 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/service/session_dto.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
 
 abstract class SessionService {
   Future<String?> saveSession(SessionModel session);
@@ -71,13 +72,15 @@ class SessionServiceImplementation implements SessionService {
 }
 
 Future<String?> _saveToRest(SessionModel model) async {
+  var token = await rootBundle.loadString('assets/textfiles/Token.txt');
+
   List<List<int>> images = [];
   for (var entry in model.images) {
     var imageInBytes = await entry.readAsBytes();
     images.add(imageInBytes);
   }
   var dto = SessionDto()
-    ..token = "" //TODO: correct token
+    ..token = token
     ..images = images;
 
   var json = jsonEncode(dto);
