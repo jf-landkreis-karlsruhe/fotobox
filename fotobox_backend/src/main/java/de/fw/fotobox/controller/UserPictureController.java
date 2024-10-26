@@ -1,6 +1,5 @@
 package de.fw.fotobox.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +31,6 @@ public class UserPictureController {
     @Value("${file.type}")
     private String fileType;
 
-    // Validierungsmethode für IDs
     private boolean isValidId(String id) {
         String regex = "^[a-zA-Z0-9_-]+$";
         return id != null && id.matches(regex);
@@ -107,10 +105,9 @@ public class UserPictureController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // Detect MIME type of the image file
         String mimeType = Files.probeContentType(file.toPath());
         if (mimeType == null) {
-            mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE; // Default to binary if MIME type is unknown
+            mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
 
         InputStreamResource resource = new InputStreamResource(Files.newInputStream(file.toPath()));
