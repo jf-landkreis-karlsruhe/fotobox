@@ -84,9 +84,15 @@ Future<String?> _saveToRest(SessionModel model) async {
     ..images = images;
 
   var json = jsonEncode(dto);
+  var headers = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*"
+  };
+  var url = Uri.http("localhost:8080", "/savesession");
   var response = await http.post(
-    Uri.http("127.0.0.1:8080", "/savesession"),
+    url,
     body: json,
+    headers: headers,
   );
 
   if (response.statusCode != 200) {

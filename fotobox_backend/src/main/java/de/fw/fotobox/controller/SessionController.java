@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/savesession")
 public class SessionController {
