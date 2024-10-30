@@ -202,7 +202,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                                               ),
                                               image: PrettyQrDecorationImage(
                                                 image: AssetImage(
-                                                    'images/Elefant_ohneFlaeche.png'),
+                                                    'assets/images/Elefant_ohneFlaeche.png'),
                                               ),
                                             ),
                                           ),

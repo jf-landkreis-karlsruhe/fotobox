@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
         ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: Image.asset('images/Elefant_ohneFlaeche.png'),
+          child: Image.asset('assets/images/Elefant_ohneFlaeche.png'),
         ),
         leadingWidth: 80,
       ),
