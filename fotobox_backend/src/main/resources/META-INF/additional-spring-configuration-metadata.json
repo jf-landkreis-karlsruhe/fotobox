@@ -23,5 +23,10 @@
     "name": "cryption.key",
     "type": "java.lang.String",
     "description": "A description for 'cryption.key'"
+  },
+  {
+    "name": "session.ip",
+    "type": "java.lang.String",
+    "description": "A description for 'session.ip'"
   }
 ]}

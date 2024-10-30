@@ -25,6 +25,12 @@ public class SessionController {
 
 	@Value("${file.type}")
 	private String fileType;
+	
+	@Value("${session.ip}")
+	private String sessionIp;
+	
+	
+	
 
 	private static final String ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	private static final int CODE_LENGTH = 8;
@@ -63,7 +69,7 @@ public class SessionController {
 		}
 
 		response.setStatus(HttpServletResponse.SC_OK);
-		return "localhost:8080/?code=" + uniqueCode;
+		return sessionIp + ":8080/?code=" + uniqueCode;
 	}
 
 	private String generateUniqueCode() {
