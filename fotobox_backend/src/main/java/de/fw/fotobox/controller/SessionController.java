@@ -56,7 +56,7 @@ public class SessionController {
 
 		for (int i = 0; i < images.size(); i++) {
 			List<Byte> imageBytes = images.get(i);
-			File imageFile = new File(uniqueFolder, "image_" + (i + 1) + "." + fileType);
+			File imageFile = new File(uniqueFolder, uniqueCode + "_image_" + (i + 1) + "." + fileType);
 
 			try (FileOutputStream fos = new FileOutputStream(imageFile)) {
 				for (byte b : imageBytes) {

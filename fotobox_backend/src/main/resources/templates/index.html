@@ -5,58 +5,17 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Code Input</title>
+
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/styles.css">
-	<style>
-		/* Custom CSS to align the buttons */
-		.button-container {
-			display: flex;
-			justify-content: space-between;
-			margin-top: 10px;
-			margin-bottom: 10px;
-		}
-
-		.image-grid {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 10px;
-		}
-
-		.image-card {
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			overflow: hidden;
-			width: calc(25% - 10px);
-			/* Adjust for gaps */
-		}
-
-		.image-card img {
-			width: 100%;
-			height: auto;
-		}
-
-		.image-card .card-body {
-			text-align: center;
-		}
-
-		.image-card .btn {
-			margin-top: 5px;
-		}
-		.navbar-icon {
-			width: 50px; 
-			height: 50px; 
-			margin-right: 10px; 
-			object-fit: contain; 
-		}
-	</style>
+	<script src="/css/bootstrap.bundle.min.js"> </script>
+	<link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 	<header>
-		<nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
 				<a class="navbar-brand d-flex align-items-center" href="/">
-					<!-- Icon neben dem Home-Button hinzufügen -->
 					<img src="/images/logoJF.png" alt="Logo" class="navbar-icon">
 					<span>Home</span>
 				</a>
@@ -67,13 +26,14 @@
 				<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a class="btn btn-outline-primary" href="/login">Login</a>
+							<a class="nav-link btn btn-outline-primary" href="/login">Login</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
+
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-md-8">
@@ -171,7 +131,6 @@
 				return;
 			}
 
-			// Fetch all images as a zip file
 			fetch(`/getPictureById/${code}`)
 				.then(response => {
 					if (response.ok) {
