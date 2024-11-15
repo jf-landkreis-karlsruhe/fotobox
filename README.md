@@ -8,13 +8,12 @@ Steps:
   5. Jar-File ausführen mit properties Datei
 
 
-1.
-Jar-File mit folgendem Befehl aus dem Backend Ordner ausführen:
+1: Jar-File mit folgendem Befehl aus dem Backend Ordner ausführen:
 mvn clean package
 
-2-3 Nach gewünschtem Ergebnis selber anpassen
+2-3: Nach gewünschtem Ergebnis selber anpassen
   
-4. application.properties Datei anlegen oder vorhandene Kopieren.
+4: application.properties Datei anlegen oder vorhandene Kopieren.
 Original befindet sich unter fotobox_backend/src/resources/application.properties
 
 Konfigurationen:
@@ -31,5 +30,5 @@ spring.thymeleaf.suffix=.html
 spring.thymeleaf.mode=HTML5
 spring.thymeleaf.encoding=UTF-8
 
-5. Jar ausführen mit folgendem Befehl zum einbinden der Konfiguration
+5: Jar ausführen mit folgendem Befehl zum einbinden der Konfiguration
 java -jar <FILE.jar> --spring.config.location=<PATH to application.properties>
