@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fotobox_frontend/src/qr_view.dart';
 import 'home_view.dart';
 
 /// The Widget that configures your application.
@@ -45,6 +46,8 @@ class MainWidget extends StatelessWidget {
           settings: routeSettings,
           builder: (BuildContext context) {
             switch (routeSettings.name) {
+              case QrView.routeName:
+                return const QrView();
               case HomeView.routeName:
               default:
                 return const HomeView();

@@ -20,12 +20,19 @@ class _NewSessionViewState extends State<NewSessionView> {
   }
 
   @override
+  void initState() {
+    focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var manager = di<SessionManager>();
 
+    focusNode.requestFocus();
+
     return KeyboardListener(
       focusNode: focusNode,
-      autofocus: true,
       onKeyEvent: (value) {
         if (value.logicalKey == LogicalKeyboardKey.enter) {
           manager.startNewSessionCommand();

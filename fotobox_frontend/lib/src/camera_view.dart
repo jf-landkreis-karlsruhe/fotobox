@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:io';
 import 'package:animated_countdown/animated_countdown.dart';
 import 'package:camera/camera.dart';
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
+import 'package:fotobox_frontend/src/qr_view.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:watch_it/watch_it.dart';
 
 class CameraApp extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -41,6 +40,8 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     _initializeCameraController(widget.cameras[0]);
+
+    focusNode.requestFocus();
   }
 
   Future<void> _initializeCameraController(
@@ -136,135 +137,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
 
     manager.saveCurrentSessionCommand();
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        var controller = CountDownController();
-
-        var dialogFocusNode = FocusNode();
-
-        return KeyboardListener(
-          focusNode: dialogFocusNode,
-          autofocus: true,
-          onKeyEvent: (value) {
-            switch (value.logicalKey) {
-              case LogicalKeyboardKey.enter:
-                controller.restart();
-                break;
-              case LogicalKeyboardKey.escape:
-                Navigator.of(context).pop();
-                break;
-              default:
-            }
-          },
-          child: Dialog.fullscreen(
-            child: ValueListenableBuilder(
-              valueListenable: manager.saveCurrentSessionCommand,
-              builder: (context, sessionLink, _) {
-                return ValueListenableBuilder(
-                  valueListenable:
-                      manager.saveCurrentSessionCommand.isExecuting,
-                  builder: (context, isRunning, _) {
-                    if (isRunning) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    dialogFocusNode.requestFocus();
-
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(50),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: sessionLink == null
-                                  ? const Center(
-                                      child: Text(
-                                        'Error while saving images!',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 40,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    )
-                                  : Column(
-                                      children: [
-                                        Expanded(
-                                          child: PrettyQrView.data(
-                                            data: sessionLink,
-                                            errorCorrectLevel:
-                                                QrErrorCorrectLevel.H,
-                                            decoration:
-                                                const PrettyQrDecoration(
-                                              shape: PrettyQrSmoothSymbol(
-                                                color: Colors.blue,
-                                              ),
-                                              image: PrettyQrDecorationImage(
-                                                image: AssetImage(
-                                                    'assets/images/Elefant_ohneFlaeche.png'),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text('Session Link: $sessionLink'),
-                                      ],
-                                    ),
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircularCountDownTimer(
-                                  controller: controller,
-                                  duration: 30,
-                                  width: 50,
-                                  height: 50,
-                                  fillColor: Colors.red,
-                                  backgroundColor: Colors.blue,
-                                  ringColor: Colors.yellow,
-                                  autoStart: true,
-                                  isReverse: true,
-                                  isTimerTextShown: true,
-                                  onComplete: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                const SizedBox(width: 10),
-                                IconButton(
-                                  onPressed: () {
-                                    controller.restart();
-                                  },
-                                  icon: const Icon(
-                                    Icons.restart_alt,
-                                    size: 50,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  icon: const Icon(
-                                    Icons.close,
-                                    size: 50,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
+    Navigator.of(context).pushNamed(QrView.routeName);
   }
 
   @override
@@ -383,9 +256,10 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
       stackChikdren.add(countDown);
     }
 
+    focusNode.requestFocus();
+
     return KeyboardListener(
       focusNode: focusNode,
-      autofocus: true,
       onKeyEvent: (value) {
         switch (value.logicalKey) {
           case LogicalKeyboardKey.enter:
