@@ -20,7 +20,7 @@ Konfigurationen:
 spring.application.name=fotobox
 folder.path=C:/Users/Herrf/Pictures/TestBilder #Ordner zu images
 file.type=jpeg
-session.ip=localhost #SessionIP für den QR-Code
+session.ip=localadress #SessionIP für den QR-Code "localadress" führt dazu, dass die Applikation nach der internen InetAdress sucht
 cryption.key=test #SecurityKey für die Verbindung mit dem Frontend
 admin.username=admin #Username für Weblogin
 admin.password=admin #Passwort für Weblogin
