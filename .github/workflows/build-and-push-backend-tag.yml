@@ -23,6 +23,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Add metadata to docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/jf-landkreis-karlsruhe/fotobox_backend
+
       - name: Build Docker image
         run: docker build -t ghcr.io/${{ github.repository_owner }}/fotobox_backend:latest ./fotobox_backend/Dockerfile
         
