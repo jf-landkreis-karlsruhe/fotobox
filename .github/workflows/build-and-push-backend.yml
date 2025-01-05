@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/fotobox_backend:latest ./path/to/backend/Dockerfile
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/fotobox_backend:latest ./fotobox_backend/Dockerfile
 
       - name: Push Docker image
         run: docker push ghcr.io/${{ github.repository_owner }}/fotobox_backend:latest
