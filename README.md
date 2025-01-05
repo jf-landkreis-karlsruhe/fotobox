@@ -32,3 +32,12 @@ spring.thymeleaf.encoding=UTF-8
 
 5: Jar ausführen mit folgendem Befehl zum einbinden der Konfiguration
 java -jar <FILE.jar> --spring.config.location=<PATH to application.properties>
+
+## Run with docker
+
+
+### Frontend
+```sh
+docker build -t fotobox_frontend .
+docker run -p 8080:80 fotobox_frontend
+```

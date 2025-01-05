@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  fotobox_frontend:
+    image: fotobox_frontend:latest
+    ports:
+      - "8081:80"  # Mapping port 8081 on the host to port 80 on the container
+    depends_on:
+      - fotobox_backend
+    volumes:
+      - "./Token.txt:/usr/share/nginx/html/assets/assets/textfiles/Token.txt"
+
+  fotobox_backend:
+    image: fotobox_backend:latest
+    ports:
+      - "8080:8080"  # Mapping port 8080 on the host to port 8080 on the container
+    environment:
+      - SPRING_APPLICATION_NAME=fotobox
+      - FOLDER_PATH=/app/uploaded
+      - FILE_TYPE=jpeg
+      - SESSION_IP=localadress
+      - CRYPTION_KEY=1234567890
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+      - SPRING_THYMELEAF_CACHE=false
+      - SPRING_THYMELEAF_PREFIX=classpath:/templates/
+      - SPRING_THYMELEAF_SUFFIX=_html
+      - SPRING_THYMELEAF_MODE=HTML5
+      - SPRING_THYMELEAF_ENCODING=UTF-8
+    volumes:
+      - "./uploaded:/app/uploaded"
