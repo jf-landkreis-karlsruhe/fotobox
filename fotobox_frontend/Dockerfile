@@ -29,4 +29,8 @@ COPY --from=build /app/build/web /usr/share/nginx/html
 EXPOSE 80
 
 # Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Create entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

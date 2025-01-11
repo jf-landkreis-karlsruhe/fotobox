@@ -7,19 +7,19 @@ services:
       - "8081:80"  # Mapping port 8081 on the host to port 80 on the container
     depends_on:
       - fotobox_backend
-    volumes:
-      - "./Token.txt:/usr/share/nginx/html/assets/assets/textfiles/Token.txt"
+    environment:
+      - CRYPTION_KEY=1234567890 # Need to be the same as in the backend
 
   fotobox_backend:
     image: fotobox_backend:latest
     ports:
       - "8080:8080"  # Mapping port 8080 on the host to port 8080 on the container
     environment:
+      - CRYPTION_KEY=1234567890 # Need to be the same as in the frontend
       - SPRING_APPLICATION_NAME=fotobox
       - FOLDER_PATH=/app/uploaded
       - FILE_TYPE=jpeg
       - SESSION_IP=localadress
-      - CRYPTION_KEY=1234567890
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=admin
       - SPRING_THYMELEAF_CACHE=false
