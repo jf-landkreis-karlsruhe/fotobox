@@ -73,8 +73,6 @@ class SessionServiceImplementation implements SessionService {
 
 Future<String?> _saveToRest(SessionModel model) async {
   var token = await rootBundle.loadString('assets/textfiles/Token.txt');
-  token = token.replaceAll('\n', '');
-  print(token);
 
   List<List<int>> images = [];
   for (var entry in model.images) {

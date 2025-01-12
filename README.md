@@ -43,7 +43,7 @@ git push origin v1.0.0
 ```
 
 ## Run with docker
-Use the docker-compose.yml file to run the backend and frontend.
+Use the docker-compose.yml file in the deploy folder to run the backend and frontend.
 
 ### Backend
 ```sh
