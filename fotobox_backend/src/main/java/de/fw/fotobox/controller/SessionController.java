@@ -39,6 +39,9 @@ public class SessionController {
 	@PostMapping
 	public String saveSession(@RequestBody SessionRequest sessionRequest, HttpServletResponse response) {
 		String token = sessionRequest.getToken();
+		if (token != null) {
+			token = token.replaceAll("\"", "");
+		}
 		if (!cryptionKey.equals(token)) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			return "Ungültiger Schlüssel";
