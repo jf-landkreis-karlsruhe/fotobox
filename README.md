@@ -17,6 +17,7 @@ mvn clean package
 Original befindet sich unter fotobox_backend/src/resources/application.properties
 
 Konfigurationen:
+```
 spring.application.name=fotobox
 folder.path=C:/Users/Herrf/Pictures/TestBilder #Ordner zu images
 file.type=jpeg
@@ -29,6 +30,29 @@ spring.thymeleaf.prefix=classpath:/templates/
 spring.thymeleaf.suffix=.html
 spring.thymeleaf.mode=HTML5
 spring.thymeleaf.encoding=UTF-8
+```
 
 5: Jar ausführen mit folgendem Befehl zum einbinden der Konfiguration
 java -jar <FILE.jar> --spring.config.location=<PATH to application.properties>
+
+## Create a release
+To create a release, push a tag to the repository.
+```sh
+git tag -a v1.0.0 -m "Release 1.0.0"
+git push origin v1.0.0
+```
+
+## Run with docker
+Use the docker-compose.yml file in the deploy folder to run the backend and frontend.
+
+### Backend
+```sh
+docker build -t fotobox_backend .
+docker run -p 8080:8080 fotobox_backend
+```
+
+### Frontend
+```sh
+docker build -t fotobox_frontend .
+docker run -p 8080:80 fotobox_frontend
+```
