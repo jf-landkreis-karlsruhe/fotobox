@@ -5,6 +5,7 @@ import 'package:fotobox_frontend/src/home_view.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:fotobox_frontend/src/service/keyboard_service.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});
@@ -40,6 +41,9 @@ class _QrViewState extends State<QrView> {
   @override
   Widget build(BuildContext context) {
     final SessionManager manager = di<SessionManager>();
+
+    final KeyboardService keyboardService = di<KeyboardService>();
+    keyboardService.currentScreen('newsession');
 
     return Scaffold(
       body: KeyboardListener(
