@@ -10,6 +10,7 @@ import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/qr_view.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:fotobox_frontend/src/service/keyboard_service.dart';
 
 class CameraApp extends StatefulWidget with WatchItStatefulWidgetMixin {
   /// Default Constructor
@@ -299,6 +300,8 @@ class CameraSessionView extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
+    KeyboardService keyboardService = di<KeyboardService>();
+    keyboardService.currentScreen('cameraview');
     var manager = watchIt<SessionManager>();
     var currentSession = manager.currentSession;
 

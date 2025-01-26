@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
+import 'package:fotobox_frontend/src/service/keyboard_service.dart';
 import 'package:watch_it/watch_it.dart';
 
 class NewSessionView extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -22,6 +23,8 @@ class _NewSessionViewState extends State<NewSessionView> {
   @override
   void initState() {
     focusNode.requestFocus();
+    KeyboardService keyboardService = di<KeyboardService>();
+    keyboardService.currentScreen('newsession');
     super.initState();
   }
 
