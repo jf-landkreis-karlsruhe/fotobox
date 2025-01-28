@@ -301,7 +301,7 @@ class CameraSessionView extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     KeyboardService keyboardService = di<KeyboardService>();
-    keyboardService.currentScreen('cameraview');
+    keyboardService.currentScreen('camera_view');
     var manager = watchIt<SessionManager>();
     var currentSession = manager.currentSession;
 

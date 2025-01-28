@@ -11,12 +11,8 @@ class KeyboardServiceImplementation implements KeyboardService {
   String? _baseUrl;
 
   Future<String> _init() async {
-    print('KeyboardServiceImplementation: _init');
     var configFile = await rootBundle.loadString('assets/config.json');
-    print('KeyboardServiceImplementation: _init2');
     var config = jsonDecode(configFile);
-    print('KeyboardServiceImplementation: _init3');
-    print('KeyboardServiceImplementation: _init: ${config['keyboardUrl']}');
 
     _baseUrl = config['keyboardUrl'];
     return config['keyboardUrl'];
@@ -27,9 +23,8 @@ class KeyboardServiceImplementation implements KeyboardService {
       if (_baseUrl == null) {
         await _init();
       }
-      print('KeyboardServiceImplementation');
       var url = Uri.http(_baseUrl!, '/api/v1/scene/$screenId');
-      print('KeyboardServiceImplementation: currentScreen: $_baseUrl');
+      print('KeyboardServiceImplementation: currentScreen: $screenId');
       var response = await http.post(url);
 
       if (response.statusCode != 200) {

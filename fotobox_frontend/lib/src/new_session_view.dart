@@ -23,8 +23,6 @@ class _NewSessionViewState extends State<NewSessionView> {
   @override
   void initState() {
     focusNode.requestFocus();
-    KeyboardService keyboardService = di<KeyboardService>();
-    keyboardService.currentScreen('newsession');
     super.initState();
   }
 

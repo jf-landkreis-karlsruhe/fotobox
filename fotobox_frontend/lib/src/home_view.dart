@@ -17,7 +17,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     KeyboardService keyboardService = di<KeyboardService>();
-    keyboardService.currentScreen('1');
+    keyboardService.currentScreen('home_view');
     return Scaffold(
       appBar: AppBar(
         title: const Text(

@@ -43,7 +43,7 @@ class _QrViewState extends State<QrView> {
     final SessionManager manager = di<SessionManager>();
 
     final KeyboardService keyboardService = di<KeyboardService>();
-    keyboardService.currentScreen('newsession');
+    keyboardService.currentScreen('qr_view');
 
     return Scaffold(
       body: KeyboardListener(
