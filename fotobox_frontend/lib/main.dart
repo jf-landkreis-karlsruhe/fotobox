@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
-import 'package:fotobox_frontend/src/service/keyboard_service.dart';
+import 'package:fotobox_frontend/src/service/button_box_service.dart';
 import 'package:fotobox_frontend/src/service/session_service.dart';
+import 'package:fotobox_frontend/src/service/config_service.dart';
 import 'package:watch_it/watch_it.dart';
 import 'src/app.dart';
 
 void setup() {
-  di.registerSingleton<SessionService>(SessionServiceImplementation());
-  di.registerSingleton<KeyboardService>(KeyboardServiceImplementation());
+  ConfigService configService = ConfigServiceImplementation();
+
+  di.registerSingleton<ConfigService>(ConfigServiceImplementation());
+  di.registerSingleton<SessionService>(SessionServiceImplementation(configService));
+  di.registerSingleton<ButtonBoxService>(ButtonBoxServiceImplementation(configService));
 
   di.registerSingleton<SessionManager>(SessionManagerImplementation());
 }

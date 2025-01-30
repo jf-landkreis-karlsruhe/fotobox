@@ -10,7 +10,7 @@ import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/qr_view.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
 import 'package:watch_it/watch_it.dart';
-import 'package:fotobox_frontend/src/service/keyboard_service.dart';
+import 'package:fotobox_frontend/src/service/button_box_service.dart';
 
 class CameraApp extends StatefulWidget with WatchItStatefulWidgetMixin {
   /// Default Constructor
@@ -211,6 +211,15 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
+              onPressed: pictureButtonWasPressed
+                  ? null
+                  : () {
+                      manager.endCurrentSessionCommand();
+                    },
+              icon: const Icon(Icons.close),
+            ),
+            const SizedBox(width: 10),
+            IconButton(
               onPressed: pictureButtonWasPressed || maxPicturesReached
                   ? null
                   : () {
@@ -228,15 +237,6 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                       saveSession();
                     },
               icon: const Icon(Icons.save_outlined),
-            ),
-            const SizedBox(width: 10),
-            IconButton(
-              onPressed: pictureButtonWasPressed
-                  ? null
-                  : () {
-                      manager.endCurrentSessionCommand();
-                    },
-              icon: const Icon(Icons.close),
             ),
           ],
         ),
@@ -300,8 +300,8 @@ class CameraSessionView extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    KeyboardService keyboardService = di<KeyboardService>();
-    keyboardService.currentScreen('camera_view');
+    ButtonBoxService buttonBoxService = di<ButtonBoxService>();
+    buttonBoxService.currentScreen('camera_view');
     var manager = watchIt<SessionManager>();
     var currentSession = manager.currentSession;
 
