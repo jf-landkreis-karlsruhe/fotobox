@@ -148,6 +148,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     final SessionManager manager = di<SessionManager>();
 
     bool maxPicturesReached = widget.currentSession.images.length >= 10;
+    bool noPictureTaken = widget.currentSession.images.length == 0;
 
     if (!controller.value.isInitialized) {
       if (error.isNotEmpty) {
@@ -264,12 +265,10 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
       onKeyEvent: (value) {
         switch (value.logicalKey) {
           case LogicalKeyboardKey.enter:
-            if (pictureButtonWasPressed || maxPicturesReached) {
+            if (pictureButtonWasPressed || noPictureTaken) {
               return;
             }
-            setState(() {
-              pictureButtonWasPressed = true;
-            });
+            saveSession();
             break;
           case LogicalKeyboardKey.escape:
             if (pictureButtonWasPressed) {
@@ -278,10 +277,12 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
             manager.endCurrentSessionCommand();
             break;
           case LogicalKeyboardKey.space:
-            if (pictureButtonWasPressed) {
+            if (pictureButtonWasPressed || maxPicturesReached) {
               return;
             }
-            saveSession();
+            setState(() {
+              pictureButtonWasPressed = true;
+            });
             break;
           default:
         }

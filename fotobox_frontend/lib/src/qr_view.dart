@@ -51,9 +51,10 @@ class _QrViewState extends State<QrView> {
         autofocus: true,
         onKeyEvent: (value) {
           switch (value.logicalKey) {
-            case LogicalKeyboardKey.enter:
+            case LogicalKeyboardKey.space:
               controller.restart();
               break;
+            case LogicalKeyboardKey.enter:
             case LogicalKeyboardKey.escape:
               Navigator.of(context).pushNamed(HomeView.routeName);
               break;
