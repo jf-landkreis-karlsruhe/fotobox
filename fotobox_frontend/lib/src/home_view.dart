@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fotobox_frontend/src/camera_view.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:fotobox_frontend/src/new_session_view.dart';
+import 'package:fotobox_frontend/src/service/button_box_service.dart';
 import 'package:watch_it/watch_it.dart';
 
 /// Displays a list of SampleItems.
@@ -15,6 +16,8 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ButtonBoxService buttonBoxService = di<ButtonBoxService>();
+    buttonBoxService.currentScreen('home_view');
     return Scaffold(
       appBar: AppBar(
         title: const Text(

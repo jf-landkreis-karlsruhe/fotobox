@@ -40,9 +40,9 @@ public class SessionController {
 	public String saveSession(@RequestBody SessionRequest sessionRequest, HttpServletResponse response) {
 		String token = sessionRequest.getToken();
 		if (token != null) {
-			token = token.replaceAll("\"", "");
+			token = token.replaceAll("[^a-zA-Z0-9]", "");
 		}
-		if (!cryptionKey.equals(token)) {
+		if (!cryptionKey.replaceAll("[^a-zA-Z0-9]", "").equals(token)) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			return "Ungültiger Schlüssel";
 		}

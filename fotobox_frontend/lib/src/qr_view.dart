@@ -5,6 +5,7 @@ import 'package:fotobox_frontend/src/home_view.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:fotobox_frontend/src/service/button_box_service.dart';
 
 class QrView extends StatefulWidget {
   const QrView({super.key});
@@ -41,15 +42,19 @@ class _QrViewState extends State<QrView> {
   Widget build(BuildContext context) {
     final SessionManager manager = di<SessionManager>();
 
+    final ButtonBoxService buttonBoxService = di<ButtonBoxService>();
+    buttonBoxService.currentScreen('qr_view');
+
     return Scaffold(
       body: KeyboardListener(
         focusNode: focusNode,
         autofocus: true,
         onKeyEvent: (value) {
           switch (value.logicalKey) {
-            case LogicalKeyboardKey.enter:
+            case LogicalKeyboardKey.space:
               controller.restart();
               break;
+            case LogicalKeyboardKey.enter:
             case LogicalKeyboardKey.escape:
               Navigator.of(context).pushNamed(HomeView.routeName);
               break;
@@ -114,6 +119,27 @@ class _QrViewState extends State<QrView> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pushNamed(HomeView.routeName);
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                size: 50,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              onPressed: () {
+                                controller.restart();
+                              },
+                              icon: const Icon(
+                                Icons.restart_alt,
+                                size: 50,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
                             CircularCountDownTimer(
                               controller: controller,
                               duration: 30,
@@ -129,27 +155,6 @@ class _QrViewState extends State<QrView> {
                                 Navigator.of(context)
                                     .pushNamed(HomeView.routeName);
                               },
-                            ),
-                            const SizedBox(width: 10),
-                            IconButton(
-                              onPressed: () {
-                                controller.restart();
-                              },
-                              icon: const Icon(
-                                Icons.restart_alt,
-                                size: 50,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(HomeView.routeName);
-                              },
-                              icon: const Icon(
-                                Icons.close,
-                                size: 50,
-                              ),
                             ),
                           ],
                         ),

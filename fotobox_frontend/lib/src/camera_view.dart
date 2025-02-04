@@ -10,6 +10,7 @@ import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/qr_view.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:fotobox_frontend/src/service/button_box_service.dart';
 
 class CameraApp extends StatefulWidget with WatchItStatefulWidgetMixin {
   /// Default Constructor
@@ -147,6 +148,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     final SessionManager manager = di<SessionManager>();
 
     bool maxPicturesReached = widget.currentSession.images.length >= 10;
+    bool noPictureTaken = widget.currentSession.images.length == 0;
 
     if (!controller.value.isInitialized) {
       if (error.isNotEmpty) {
@@ -210,6 +212,15 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
+              onPressed: pictureButtonWasPressed
+                  ? null
+                  : () {
+                      manager.endCurrentSessionCommand();
+                    },
+              icon: const Icon(Icons.close),
+            ),
+            const SizedBox(width: 10),
+            IconButton(
               onPressed: pictureButtonWasPressed || maxPicturesReached
                   ? null
                   : () {
@@ -227,15 +238,6 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                       saveSession();
                     },
               icon: const Icon(Icons.save_outlined),
-            ),
-            const SizedBox(width: 10),
-            IconButton(
-              onPressed: pictureButtonWasPressed
-                  ? null
-                  : () {
-                      manager.endCurrentSessionCommand();
-                    },
-              icon: const Icon(Icons.close),
             ),
           ],
         ),
@@ -263,12 +265,10 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
       onKeyEvent: (value) {
         switch (value.logicalKey) {
           case LogicalKeyboardKey.enter:
-            if (pictureButtonWasPressed || maxPicturesReached) {
+            if (pictureButtonWasPressed || noPictureTaken) {
               return;
             }
-            setState(() {
-              pictureButtonWasPressed = true;
-            });
+            saveSession();
             break;
           case LogicalKeyboardKey.escape:
             if (pictureButtonWasPressed) {
@@ -277,10 +277,12 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
             manager.endCurrentSessionCommand();
             break;
           case LogicalKeyboardKey.space:
-            if (pictureButtonWasPressed) {
+            if (pictureButtonWasPressed || maxPicturesReached) {
               return;
             }
-            saveSession();
+            setState(() {
+              pictureButtonWasPressed = true;
+            });
             break;
           default:
         }
@@ -299,6 +301,8 @@ class CameraSessionView extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
+    ButtonBoxService buttonBoxService = di<ButtonBoxService>();
+    buttonBoxService.currentScreen('camera_view');
     var manager = watchIt<SessionManager>();
     var currentSession = manager.currentSession;
 
