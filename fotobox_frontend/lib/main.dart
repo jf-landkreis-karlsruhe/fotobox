@@ -9,7 +9,6 @@ import 'src/app.dart';
 void setup() {
   ConfigService configService = ConfigServiceImplementation();
 
-  di.registerSingleton<ConfigService>(ConfigServiceImplementation());
   di.registerSingleton<SessionService>(SessionServiceImplementation(configService));
   di.registerSingleton<ButtonBoxService>(ButtonBoxServiceImplementation(configService));
 
