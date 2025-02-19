@@ -9,6 +9,8 @@ services:
       - fotobox_backend
     environment:
       - CRYPTION_KEY=1234567890 # Need to be the same as in the backend
+      - BACKEND_URL=localhost:8080 # Without http://
+      - BUTTON_BOX_URL=localhost:9000 # Without http://
 
   fotobox_backend:
     image: fotobox_backend:latest

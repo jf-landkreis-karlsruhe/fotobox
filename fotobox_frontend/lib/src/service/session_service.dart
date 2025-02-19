@@ -7,17 +7,22 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/service/session_dto.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:fotobox_frontend/src/service/config_service.dart';
 
 abstract class SessionService {
   Future<String?> saveSession(SessionModel session);
 }
 
 class SessionServiceImplementation implements SessionService {
+  late final ConfigService configService;
+
+  SessionServiceImplementation(this.configService);
+
   @override
   Future<String?> saveSession(SessionModel session) async {
     try {
-      return await _saveToRest(session);
+      String token = await configService.getToken();
+      return await _saveToRest(session, token);
     } catch (e) {
       return await _saveSessionLocal(session);
     }
@@ -71,9 +76,7 @@ class SessionServiceImplementation implements SessionService {
   }
 }
 
-Future<String?> _saveToRest(SessionModel model) async {
-  var token = await rootBundle.loadString('assets/textfiles/Token.txt');
-
+Future<String?> _saveToRest(SessionModel model, String token) async {
   List<List<int>> images = [];
   for (var entry in model.images) {
     var imageInBytes = await entry.readAsBytes();
