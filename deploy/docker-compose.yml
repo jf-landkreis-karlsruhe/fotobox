@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   fotobox_frontend:
-    image: fotobox_frontend:latest
+    image: ghcr.io/jf-landkreis-karlsruhe/fotobox_frontend:1.2.4
     ports:
       - "8081:80"  # Mapping port 8081 on the host to port 80 on the container
     depends_on:
@@ -13,7 +13,7 @@ services:
       - BUTTON_BOX_URL=localhost:9000 # Without http://
 
   fotobox_backend:
-    image: fotobox_backend:latest
+    image: ghcr.io/jf-landkreis-karlsruhe/fotobox_backend:1.2.4
     ports:
       - "8080:8080"  # Mapping port 8080 on the host to port 8080 on the container
     environment:
@@ -24,10 +24,5 @@ services:
       - SESSION_IP=localadress
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=admin
-      - SPRING_THYMELEAF_CACHE=false
-      - SPRING_THYMELEAF_PREFIX=classpath:/templates/
-      - SPRING_THYMELEAF_SUFFIX=_html
-      - SPRING_THYMELEAF_MODE=HTML5
-      - SPRING_THYMELEAF_ENCODING=UTF-8
     volumes:
       - "./uploaded:/app/uploaded"
