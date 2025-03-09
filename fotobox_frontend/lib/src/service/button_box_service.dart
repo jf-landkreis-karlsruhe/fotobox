@@ -19,7 +19,7 @@ class ButtonBoxServiceImplementation implements ButtonBoxService {
       var baseUrl = await configService.getButtonBoxUrl();
       var url = Uri.http(baseUrl, '/api/v1/scene/$screenId');
       print('ButtonBoxService: currentScreen: $screenId');
-      var response = await http.post(url);
+      var response = await http.get(url);
 
       if (response.statusCode != 200) {
         throw Exception('Fehler beim Erstellen der Szene: ${response.statusCode}');
