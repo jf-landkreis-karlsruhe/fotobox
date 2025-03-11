@@ -143,6 +143,8 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    ButtonBoxService buttonBoxService = di<ButtonBoxService>();
+    buttonBoxService.currentScreen('camera_view');
     var lastImage =
         watchPropertyValue((SessionManager manager) => manager.lastImage);
     final SessionManager manager = di<SessionManager>();
@@ -274,6 +276,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
             if (pictureButtonWasPressed) {
               return;
             }
+            buttonBoxService.currentScreen('home_view');
             manager.endCurrentSessionCommand();
             break;
           case LogicalKeyboardKey.space:
@@ -301,8 +304,6 @@ class CameraSessionView extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    ButtonBoxService buttonBoxService = di<ButtonBoxService>();
-    buttonBoxService.currentScreen('camera_view');
     var manager = watchIt<SessionManager>();
     var currentSession = manager.currentSession;
 
