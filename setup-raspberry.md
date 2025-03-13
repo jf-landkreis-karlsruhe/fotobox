@@ -2,6 +2,17 @@
 
 ## WLAN Hotspot on second wlan interface
 
+### Current startup procedure
+
+Step 1:
+
+```bash
+ cd ~/Donwloads/CM762-35264_USB无线网卡驱动_V1.3/Linux/linux_driver_package/
+ sudo dpkg -i aic8800d80fdrvpackage.deb
+ ```
+
+Step 2: Run as root: `hotspot-init.sh`
+
 ### Install UGREEN USB Wifi6 Stick (AX900)
 
 Download driver from [https://www.lulian.cn/download/135.html](https://www.lulian.cn/download/135.html)
