@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
-
 
 abstract class ConfigService {
   Future<String> getBackendUrl();
@@ -17,27 +14,21 @@ class ConfigServiceImplementation implements ConfigService {
 
   @override
   Future<String> getBackendUrl() async {
-    if (_backendUrl == null) {
-      _backendUrl = await rootBundle.loadString('assets/textfiles/backend-url.txt');
-    }
+    _backendUrl ??=
+        await rootBundle.loadString('assets/textfiles/backend-url.txt');
     return _backendUrl!;
   }
 
   @override
   Future<String> getButtonBoxUrl() async {
-    if (_buttonBoxUrl == null) {
-      _buttonBoxUrl = await rootBundle.loadString('assets/textfiles/button-box-url.txt');
-    }
+    _buttonBoxUrl ??=
+        await rootBundle.loadString('assets/textfiles/button-box-url.txt');
     return _buttonBoxUrl!;
   }
 
   @override
   Future<String> getToken() async {
-    if (_token == null) {
-      _token = await rootBundle.loadString('assets/textfiles/token.txt');
-    }
+    _token ??= await rootBundle.loadString('assets/textfiles/token.txt');
     return _token!;
   }
-
-
 }
