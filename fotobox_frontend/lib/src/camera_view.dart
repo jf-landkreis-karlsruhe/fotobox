@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fotobox_frontend/src/home_view.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/qr_view.dart';
@@ -17,11 +18,11 @@ class CameraApp extends StatefulWidget with WatchItStatefulWidgetMixin {
   /// Default Constructor
   const CameraApp({
     super.key,
-    required this.cameras,
+    required this.camera,
     required this.currentSession,
   });
 
-  final List<CameraDescription> cameras;
+  final CameraDescription camera;
   final SessionModel currentSession;
 
   @override
@@ -41,7 +42,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    _initializeCameraController(widget.cameras[0]);
+    _initializeCameraController(widget.camera);
 
     focusNode.requestFocus();
   }
@@ -151,7 +152,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
     final SessionManager manager = di<SessionManager>();
 
     bool maxPicturesReached = widget.currentSession.images.length >= 10;
-    bool noPictureTaken = widget.currentSession.images.length == 0;
+    bool noPictureTaken = widget.currentSession.images.isEmpty;
 
     if (!controller.value.isInitialized) {
       if (error.isNotEmpty) {
@@ -219,6 +220,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
                   ? null
                   : () {
                       manager.endCurrentSessionCommand();
+                      context.go(HomeView.routeName);
                     },
               icon: const Icon(Icons.close),
             ),
@@ -299,32 +301,34 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
 }
 
 class CameraSessionView extends StatelessWidget with WatchItMixin {
-  const CameraSessionView({super.key, required this.cameras});
+  const CameraSessionView({super.key});
 
-  final List<CameraDescription> cameras;
+  static const routeName = '/camera';
 
   @override
   Widget build(BuildContext context) {
     var manager = watchIt<SessionManager>();
     var currentSession = manager.currentSession;
 
-    if (currentSession == null) {
+    if (currentSession == null || manager.currentCamera == null) {
       return const Center(
         child: Text('No session active!'),
       );
     }
 
-    return Column(
-      children: [
-        Expanded(
-          child: CameraApp(
-            cameras: cameras,
-            currentSession: currentSession,
+    return MainScaffold(
+      child: Column(
+        children: [
+          Expanded(
+            child: CameraApp(
+              camera: manager.currentCamera!,
+              currentSession: currentSession,
+            ),
           ),
-        ),
-        const SizedBox(height: 10),
-        ThumbnailImagesView(currentSession: currentSession),
-      ],
+          const SizedBox(height: 10),
+          ThumbnailImagesView(currentSession: currentSession),
+        ],
+      ),
     );
   }
 }

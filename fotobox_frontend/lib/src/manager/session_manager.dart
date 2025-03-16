@@ -13,6 +13,8 @@ abstract class SessionManager extends ChangeNotifier {
   SessionModel? get currentSession;
   XFile? lastImage;
 
+  CameraDescription? currentCamera;
+
   void addImage(XFile image);
 }
 
@@ -43,6 +45,9 @@ class SessionManagerImplementation extends ChangeNotifier
     _lastImage = image;
     notifyListeners();
   }
+
+  @override
+  CameraDescription? currentCamera;
 
   SessionManagerImplementation() {
     _sessionService = di<SessionService>();

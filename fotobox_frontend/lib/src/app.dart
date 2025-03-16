@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fotobox_frontend/src/camera_view.dart';
 import 'package:fotobox_frontend/src/qr_view.dart';
 import 'package:go_router/go_router.dart';
 import 'home_view.dart';
@@ -13,7 +14,11 @@ class MainWidget extends StatelessWidget {
     routes: [
       GoRoute(
         path: HomeView.routeName,
-        builder: (context, state) => const HomeView(),
+        builder: (context, state) => HomeView(),
+      ),
+      GoRoute(
+        path: CameraSessionView.routeName,
+        builder: (context, state) => CameraSessionView(),
       ),
       GoRoute(
         path: QrView.routeName,
