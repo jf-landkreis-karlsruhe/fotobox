@@ -93,6 +93,7 @@ class MainContentView extends StatelessWidget with WatchItMixin {
       onKeyEvent: (value) {
         if (value.logicalKey == LogicalKeyboardKey.enter) {
           manager.startNewSessionCommand();
+          context.go(CameraSessionView.routeName);
         }
       },
       child: Center(

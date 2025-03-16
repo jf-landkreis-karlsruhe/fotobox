@@ -281,6 +281,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
             }
             buttonBoxService.currentScreen('home_view');
             manager.endCurrentSessionCommand();
+            context.go(HomeView.routeName);
             break;
           case LogicalKeyboardKey.space:
             if (pictureButtonWasPressed || maxPicturesReached) {
