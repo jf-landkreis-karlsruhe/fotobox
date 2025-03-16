@@ -9,8 +9,12 @@ import 'src/app.dart';
 void setup() {
   ConfigService configService = ConfigServiceImplementation();
 
-  di.registerSingleton<SessionService>(SessionServiceImplementation(configService));
-  di.registerSingleton<ButtonBoxService>(ButtonBoxServiceImplementation(configService));
+  di.registerSingleton<SessionService>(
+      SessionServiceImplementation(configService));
+  di.registerSingleton<ButtonBoxService>(
+      ButtonBoxServiceImplementation(configService));
+  //use the following for local tests without button box
+  // di.registerSingleton<ButtonBoxService>(TestButtonBoxService());
 
   di.registerSingleton<SessionManager>(SessionManagerImplementation());
 }

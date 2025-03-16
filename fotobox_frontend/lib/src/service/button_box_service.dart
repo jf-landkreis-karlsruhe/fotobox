@@ -27,3 +27,10 @@ class ButtonBoxServiceImplementation implements ButtonBoxService {
     }
   }
 }
+
+class TestButtonBoxService implements ButtonBoxService {
+  @override
+  Future currentScreen(String screenId) async {
+    // return nothing for tests
+  }
+}
