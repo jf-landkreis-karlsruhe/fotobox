@@ -182,7 +182,8 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
         ? Center(
             child: kIsWeb
                 ? Image.network(lastImage.path)
-                : Image.file(File(lastImage.path)))
+                : Image.file(File(lastImage.path)),
+          )
         : null;
 
     Widget? countDown = pictureButtonWasPressed
@@ -255,12 +256,9 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
       ],
     );
 
-    List<Widget> stackChikdren = [preview];
-    if (image != null) {
-      stackChikdren.add(image);
-    }
+    List<Widget> stackChildren = [image ?? preview];
     if (countDown != null) {
-      stackChikdren.add(countDown);
+      stackChildren.add(countDown);
     }
 
     focusNode.requestFocus();
@@ -295,7 +293,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
         }
       },
       child: Stack(
-        children: stackChikdren,
+        children: stackChildren,
       ),
     );
   }
