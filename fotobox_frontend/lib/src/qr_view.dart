@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fotobox_frontend/src/home_view.dart';
 import 'package:fotobox_frontend/src/manager/session_manager.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:fotobox_frontend/src/service/button_box_service.dart';
@@ -55,7 +56,7 @@ class _QrViewState extends State<QrView> {
               controller.restart();
               break;
             case LogicalKeyboardKey.keyX:
-              Navigator.of(context).pushNamed(HomeView.routeName);
+              context.go(HomeView.routeName);
               break;
             default:
           }
@@ -120,8 +121,7 @@ class _QrViewState extends State<QrView> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(HomeView.routeName);
+                                context.go(HomeView.routeName);
                               },
                               icon: const Icon(
                                 Icons.close,
@@ -151,8 +151,7 @@ class _QrViewState extends State<QrView> {
                               isReverse: true,
                               isTimerTextShown: true,
                               onComplete: () {
-                                Navigator.of(context)
-                                    .pushNamed(HomeView.routeName);
+                                context.go(HomeView.routeName);
                               },
                             ),
                           ],

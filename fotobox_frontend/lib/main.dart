@@ -22,5 +22,5 @@ void setup() {
 void main() async {
   setup();
   // Run the app.
-  runApp(const MainWidget());
+  runApp(MainWidget());
 }

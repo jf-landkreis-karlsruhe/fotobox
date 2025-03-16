@@ -9,6 +9,7 @@ import 'package:fotobox_frontend/src/manager/session_manager.dart';
 import 'package:fotobox_frontend/src/model/session_model.dart';
 import 'package:fotobox_frontend/src/qr_view.dart';
 import 'package:fotobox_frontend/src/thumbnail_images_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:fotobox_frontend/src/service/button_box_service.dart';
 
@@ -138,7 +139,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
 
     manager.saveCurrentSessionCommand();
 
-    Navigator.of(context).pushNamed(QrView.routeName);
+    context.go(QrView.routeName);
   }
 
   @override
