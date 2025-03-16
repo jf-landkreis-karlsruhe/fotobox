@@ -272,7 +272,7 @@ class _CameraAppState extends State<CameraApp> with WidgetsBindingObserver {
             }
             saveSession();
             break;
-          case LogicalKeyboardKey.escape:
+          case LogicalKeyboardKey.keyX:
             if (pictureButtonWasPressed) {
               return;
             }

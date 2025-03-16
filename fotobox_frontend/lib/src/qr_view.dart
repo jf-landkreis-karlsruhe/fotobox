@@ -54,7 +54,7 @@ class _QrViewState extends State<QrView> {
             case LogicalKeyboardKey.space:
               controller.restart();
               break;
-            case LogicalKeyboardKey.escape:
+            case LogicalKeyboardKey.keyX:
               Navigator.of(context).pushNamed(HomeView.routeName);
               break;
             default:
